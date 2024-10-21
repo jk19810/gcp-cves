@@ -10,11 +10,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cve.project.service.CVEService;
 
+import io.swagger.v3.oas.annotations.Hidden;
+
 @RestController
 @RequestMapping("/api/cve")
 public class CVEController {
 	
-	private final String INDEX_NAME = "test-cves";
+	private final String INDEX_NAME = "updated-cves";
 	
 	@Autowired
 	private CVEService cveService;
@@ -31,15 +33,33 @@ public class CVEController {
 		return ResponseEntity.ok(object);
 	}
 	
+	
 	@GetMapping("/versions/{versions}")
 	public ResponseEntity<?> getCVEByVersion(@PathVariable("versions") String version){
-		Object object = cveService.getByVersions(INDEX_NAME, version);
+		Object object = cveService.getCveByVersions(INDEX_NAME, version);
 		return ResponseEntity.ok(object);
 	}
 	
 	@GetMapping("/{keyword}")
-	public ResponseEntity<?> getCVEByMatchQuery(@PathVariable("keyword") String keyword){
+	public ResponseEntity<?> getCVEByWildcardSearch(@PathVariable("keyword") String keyword){
 		Object object = cveService.wildcard(INDEX_NAME, keyword);
+		return ResponseEntity.ok(object);
+	}
+	
+	
+	@GetMapping("/byArtifactAndVersion")
+	public ResponseEntity<?> getCVEByArtifactAndVersion(
+			@RequestParam String artifact,
+			@RequestParam String version){
+		Object object = cveService.getCveByArtifactAndVersions(INDEX_NAME, artifact, version);
+		return ResponseEntity.ok(object);
+	}
+	
+	@GetMapping("/byGroupAndVersion")
+	public ResponseEntity<?> getCVEByGroupAndVersion(
+			@RequestParam String group,
+			@RequestParam String version){
+		Object object = cveService.getCveByGroupAndVersions(INDEX_NAME, group, version);
 		return ResponseEntity.ok(object);
 	}
 	
