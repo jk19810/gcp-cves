@@ -1,6 +1,7 @@
 package com.cve.project.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,13 +11,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.cve.project.service.CVEService;
 
-import io.swagger.v3.oas.annotations.Hidden;
-
 @RestController
 @RequestMapping("/api/cve")
 public class CVEController {
 	
-	private final String INDEX_NAME = "updated-cves";
+	@Value("${elastic.data.index.name}")
+	private String INDEX_NAME;
 	
 	@Autowired
 	private CVEService cveService;
