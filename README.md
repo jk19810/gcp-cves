@@ -1,11 +1,16 @@
 **GCP CVE’S Project Setup from GitHub**
 This document outlines the steps to clone and set up a project from GitHub on your system.
 Prerequisites
+
 Git: Make sure Git is installed on your system. If not, you can download it.
+
 JDK: Java Development Kit (JDK) should be installed if the project uses Java. Java > = 17
+
 Elasticsearch: You need access to an Elasticsearch instance (local or remote).
+
 Elasticsearch Key File: truststore.jks file and it’s password that can generates by elasticsearch crt file.
-	We use openssl tool to convert crt file to jks file for Java Application connectivity.
+
+We use openssl tool to convert crt file to jks file for Java Application connectivity.
 
 Step-by-Step Guide
 Cloning the Project
