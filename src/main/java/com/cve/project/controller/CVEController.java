@@ -63,4 +63,10 @@ public class CVEController {
 		return ResponseEntity.ok(object);
 	}
 	
+	@GetMapping("/count/{keyword}")
+	public ResponseEntity<?> getCount(@PathVariable("keyword") String keyword){
+		Object object = cveService.getCount(INDEX_NAME, keyword);
+		return ResponseEntity.ok(object);
+	}
+	
 }

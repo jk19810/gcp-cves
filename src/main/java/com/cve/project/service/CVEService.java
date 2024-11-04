@@ -36,6 +36,9 @@ public class CVEService {
 
 	@Value("${elastic.query.wildcard}")
 	private String wildcardQuery;
+	
+	@Value("${elastic.query.count}")
+	private String countQuery;
 
 	/**
 	 * 
@@ -169,6 +172,32 @@ public class CVEService {
 		elasticQuery = elasticQuery.replace("#group#", group);
 		try {
 			Request request = new Request("GET", "/" + index + "/_search");
+			request.setJsonEntity(elasticQuery);
+			Response response = restClient.performRequest(request);
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				return EntityUtils.toString(entity);
+			}
+			return "no content found!";
+		} catch (Exception e) {
+			log.error("", e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			elasticQuery = null;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param index
+	 * @param keyword
+	 * @return
+	 */
+	public Object getCount(String index, String keyword) {
+		String elasticQuery = new String(countQuery);
+		elasticQuery = elasticQuery.replace("#keyword#", keyword);
+		try {
+			Request request = new Request("GET", "/" + index + "/_count");
 			request.setJsonEntity(elasticQuery);
 			Response response = restClient.performRequest(request);
 			HttpEntity entity = response.getEntity();
