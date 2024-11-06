@@ -100,9 +100,6 @@ public class CVEService {
 	// get data by versions related
 	public Object getCveByVersions(String index, String version) {
 		String elasticQuery = new String(versionQuery);
-		if (!version.endsWith("0")) {
-			version = version.concat(".0");
-		}
 
 		elasticQuery = elasticQuery.replace("#version#", version);
 		try {
@@ -131,9 +128,6 @@ public class CVEService {
 	 */
 	public Object getCveByArtifactAndVersions(String index, String artifact, String version) {
 		String elasticQuery = new String(queryTemplateForVersionAndArtifact);
-		if (!version.endsWith("0")) {
-			version = version.concat(".0");
-		}
 
 		elasticQuery = elasticQuery.replace("#version#", version);
 		elasticQuery = elasticQuery.replace("#artifact#", artifact);
@@ -164,9 +158,6 @@ public class CVEService {
 	 */
 	public Object getCveByGroupAndVersions(String index, String group, String version) {
 		String elasticQuery = new String(queryTemplateForVersionAndGroup);
-		if (!version.endsWith("0")) {
-			version = version.concat(".0");
-		}
 
 		elasticQuery = elasticQuery.replace("#version#", version);
 		elasticQuery = elasticQuery.replace("#group#", group);
