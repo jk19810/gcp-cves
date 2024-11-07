@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Service
-@Slf4j
 public class CVEService {
 
 	@Autowired
@@ -39,6 +36,9 @@ public class CVEService {
 	
 	@Value("${elastic.query.count}")
 	private String countQuery;
+	
+	@Value("${elastic.query.keyword}")
+	private String keywordQuery;
 
 	/**
 	 * 
@@ -184,11 +184,31 @@ public class CVEService {
 	 * @param keyword
 	 * @return
 	 */
-	public Object getCount(String index, String keyword) {
+	public Object getCount(String index) {
 		String elasticQuery = new String(countQuery);
+		try {
+			Request request = new Request("GET", "/" + index + "/_search");
+			request.setJsonEntity(elasticQuery);
+			Response response = restClient.performRequest(request);
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				return EntityUtils.toString(entity);
+			}
+			return "no content found!";
+		} catch (Exception e) {
+			log.error("", e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			elasticQuery = null;
+		}
+	}
+	
+	
+	public Object getCVSDataBasedKeyword(String index, String keyword) {
+		String elasticQuery = new String(keywordQuery);
 		elasticQuery = elasticQuery.replace("#keyword#", keyword);
 		try {
-			Request request = new Request("GET", "/" + index + "/_count");
+			Request request = new Request("GET", "/" + index + "/_search?filter_path=hits.hits._source");
 			request.setJsonEntity(elasticQuery);
 			Response response = restClient.performRequest(request);
 			HttpEntity entity = response.getEntity();
