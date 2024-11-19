@@ -15,7 +15,7 @@ import com.cve.project.service.CVEService;
 @RequestMapping("/api/cve")
 public class CVEController {
 	
-	@Value("${elastic.data.index.name}")
+	@Value("${elastic.csv.index.name}")
 	private String INDEX_NAME;
 	
 	@Autowired
