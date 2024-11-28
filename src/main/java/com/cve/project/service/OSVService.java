@@ -23,6 +23,9 @@ public class OSVService {
 	
 	@Value("${elastic.query.osv.count}")
 	private String countQuery;
+
+	@Value("${elastic.query.osv.id}")
+	private String idQuery;
 	
 	public Object getOsvByKeywordCount(String index, String keyword) {
 		String elasticQuery = new String(keywordQuery);
@@ -63,4 +66,23 @@ public class OSVService {
 		}
 	}
 
+	public Object getOsvById(String index, String keyword) {
+		String elasticQuery = new String(idQuery);
+		elasticQuery = elasticQuery.replace("#keyword#", keyword);
+		try {
+			Request request = new Request("GET", "/" + index + "/_search");
+			request.setJsonEntity(elasticQuery);
+			Response response = restClient.performRequest(request);
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				return EntityUtils.toString(entity);
+			}
+			return "no content found!";
+		} catch (Exception e) {
+			log.error("", e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			elasticQuery = null;
+		}
+	}
 }

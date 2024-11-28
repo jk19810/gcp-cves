@@ -30,4 +30,10 @@ public class OSVController {
 		Object object = osvService.getOsvByKeywordCount(INDEX_NAME, keyword);
 		return ResponseEntity.ok(object);
 	}
+
+	@GetMapping("/id/{keyword}")
+	public ResponseEntity<?> getOsvById(@PathVariable("keyword") String keyword){
+		Object object = osvService.getOsvById(INDEX_NAME, keyword);
+		return ResponseEntity.ok(object);
+	}
 }
