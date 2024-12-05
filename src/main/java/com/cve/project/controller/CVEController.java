@@ -74,5 +74,11 @@ public class CVEController {
 		Object object = cveService.getCVSDataBasedKeyword(INDEX_NAME, keyword);
 		return ResponseEntity.ok(object);
 	}
+
+	@GetMapping("/id/{keyword}")
+	public ResponseEntity<?> getCveById(@PathVariable("keyword") String keyword){
+		Object object = cveService.getCveById(INDEX_NAME, keyword);
+		return ResponseEntity.ok(object);
+	}
 	
 }

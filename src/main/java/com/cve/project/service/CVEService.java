@@ -40,6 +40,9 @@ public class CVEService {
 	@Value("${elastic.query.keyword}")
 	private String keywordQuery;
 
+	@Value("${elastic.query.cve.id}")
+	private String idQuery;
+
 	/**
 	 * 
 	 * @param index
@@ -209,6 +212,26 @@ public class CVEService {
 		elasticQuery = elasticQuery.replace("#keyword#", keyword);
 		try {
 			Request request = new Request("GET", "/" + index + "/_search?filter_path=hits.hits._source");
+			request.setJsonEntity(elasticQuery);
+			Response response = restClient.performRequest(request);
+			HttpEntity entity = response.getEntity();
+			if (entity != null) {
+				return EntityUtils.toString(entity);
+			}
+			return "no content found!";
+		} catch (Exception e) {
+			log.error("", e.getMessage());
+			throw new RuntimeException(e.getMessage());
+		} finally {
+			elasticQuery = null;
+		}
+	}
+
+	public Object getCveById(String index, String keyword) {
+		String elasticQuery = new String(idQuery);
+		elasticQuery = elasticQuery.replace("#keyword#", keyword);
+		try {
+			Request request = new Request("GET", "/" + index + "/_search");
 			request.setJsonEntity(elasticQuery);
 			Response response = restClient.performRequest(request);
 			HttpEntity entity = response.getEntity();
